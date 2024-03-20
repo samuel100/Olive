@@ -24,6 +24,27 @@ from olive.systems.system_config import SystemConfig
 logger = logging.getLogger(__name__)
 
 
+class PassConfig(ConfigBase):
+    module_path: str
+    module_dependencies: List[str] = None
+    extra_dependencies: List[str] = None
+
+    @validator("module_path", pre=True)
+    def validate_module_path(cls, v, values):
+        if not v:
+            raise ValueError("module_path cannot be empty or None")
+        return v
+
+
+class OliveConfig(ConfigBase):
+    passes: Dict[str, PassConfig]
+    extra_dependencies: Dict[str, List[str]]
+
+    @staticmethod
+    def get_default_config_path() -> str:
+        return str(Path(__file__).parents[2] / "olive_config.json")
+
+
 class RunPassConfig(FullPassConfig):
     host: SystemConfig = None
     evaluator: OliveEvaluatorConfig = None
