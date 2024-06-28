@@ -819,8 +819,9 @@ class LoRA(LoRABase):
             pytorch_model.to("cuda")
 
         # tokenizer
+        pretrained_model_name_or_path = new_model_handler.model_path if new_model_handler.model_path else new_model_handler.hf_config.model_name
         tokenizer = AutoTokenizer.from_pretrained(
-            new_model_handler.hf_config.model_name,
+            pretrained_model_name_or_path,
             trust_remote_code=new_model_handler.hf_config.from_pretrained_args.trust_remote_code,
         )
 
